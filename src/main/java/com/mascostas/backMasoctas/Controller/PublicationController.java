@@ -67,7 +67,7 @@ public class PublicationController {
                 publicationModelDto.getDistrict(),
                 publicationModelDto.getDirection(),
                 publicationModelDto.getDateLost(),
-                false,
+                true,
                 userModel
         );
         publicationService.savePublication(publicationModel);
