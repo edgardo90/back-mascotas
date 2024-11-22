@@ -5,6 +5,7 @@
  */
 package com.mascostas.backMasoctas.Controller;
 //
+
 import org.springframework.web.bind.annotation.CrossOrigin;//configura los coors
 import org.springframework.web.bind.annotation.RequestMethod;// sirve para configurar los coors
 import org.springframework.web.bind.annotation.GetMapping; // esto lo importo yo
@@ -33,6 +34,7 @@ import com.mascostas.backMasoctas.Security.Service.UserService;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -50,6 +52,7 @@ public class PublicationController {
     private UserService userService;
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('USER')") // con esto solo van poder ingresar esta ruta si esta logueado
     public ResponseEntity<?> createPublication(@RequestBody PublicationDto publicationModelDto) {
         Optional<UserModel> user = userService.getByUserName(publicationModelDto.getUserName());
         if (!user.isPresent()) {
@@ -94,15 +97,16 @@ public class PublicationController {
         if (publicationModel == null) { // si task es null
             StatusRuta status = new StatusRuta("No se encontro la publicacion"); // creo un msg con el Status model que cree
             return new ResponseEntity<>(status, HttpStatus.BAD_REQUEST); // envio un msj 
-        } else { 
+        } else {
             Map<String, Object> response = new HashMap<>();
             response.put("status", "ok");
-            response.put("data",publicationModel );
+            response.put("data", publicationModel);
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
     }
 
     @PutMapping("/update/{id}")
+    @PreAuthorize("hasRole('USER')") // con esto solo van poder ingresar esta ruta si esta logueado
     public ResponseEntity<?> updatePublication(@PathVariable Long id, @RequestBody PublicationDto publicationDto) {
         PublicationModel existingPublication = publicationService.findPublication(id);
         if (existingPublication == null) {
@@ -151,6 +155,7 @@ public class PublicationController {
     }
 
     @DeleteMapping("/delete/{id}")
+    //@PreAuthorize("hasRole('USER')") // con esto solo van poder ingresar esta ruta si esta logueado
     public ResponseEntity<Object> deletedPublication(@PathVariable Long id) {// elemino la tarea por su id ,como tasksModel esta vinculado con el modelo usuario cuando elemino la tarea tambien se elemina la tarea en usuario
         PublicationModel publicationModel = publicationService.findPublication(id); // busco la task por su id y lo guardo en una variable, .findTask(id) es una funcion que cree para buscar por su id
         //System.out.println(task); // esto es como un console.log de javaScript
