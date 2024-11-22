@@ -52,7 +52,7 @@ public class PublicationController {
     private UserService userService;
 
     @PostMapping("/create")
-    @PreAuthorize("hasRole('USER')") // con esto solo van poder ingresar esta ruta si esta logueado
+    //@PreAuthorize("hasRole('USER')") // con esto solo van poder ingresar esta ruta si esta logueado
     public ResponseEntity<?> createPublication(@RequestBody PublicationDto publicationModelDto) {
         Optional<UserModel> user = userService.getByUserName(publicationModelDto.getUserName());
         if (!user.isPresent()) {
@@ -106,7 +106,7 @@ public class PublicationController {
     }
 
     @PutMapping("/update/{id}")
-    @PreAuthorize("hasRole('USER')") // con esto solo van poder ingresar esta ruta si esta logueado
+    //@PreAuthorize("hasRole('USER')") // con esto solo van poder ingresar esta ruta si esta logueado
     public ResponseEntity<?> updatePublication(@PathVariable Long id, @RequestBody PublicationDto publicationDto) {
         PublicationModel existingPublication = publicationService.findPublication(id);
         if (existingPublication == null) {
