@@ -51,8 +51,8 @@ public class PublicationController {
 
     @PostMapping("/create")
     public ResponseEntity<?> createPublication(@RequestBody PublicationDto publicationModelDto) {
-        UserModel userModel = userService.findUser(publicationModelDto.getUserId());
-        if (userModel == null) {
+        Optional<UserModel> user = userService.getByUserName(publicationModelDto.getUserName());
+        if (!user.isPresent()) {
             StatusRuta status = new StatusRuta("No se encontro el usuario con ese id");
             return new ResponseEntity<>(status, HttpStatus.BAD_REQUEST);
         }
@@ -68,7 +68,7 @@ public class PublicationController {
                 publicationModelDto.getDirection(),
                 publicationModelDto.getDateLost(),
                 true,
-                userModel
+                user.get()
         );
         publicationService.savePublication(publicationModel);
         Map<String, Object> response = new HashMap<>(); // es una estructura de datos que almacena pares clave-valo

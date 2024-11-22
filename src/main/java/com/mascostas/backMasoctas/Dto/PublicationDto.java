@@ -29,5 +29,5 @@ public class PublicationDto {
     private String direction;
     private String dateLost;
     private Boolean isLost;
-    private int userId;
+    private String userName;
 }
